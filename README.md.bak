@@ -11,7 +11,7 @@ conda activate LaWa
 Run the following script to download our pretrained modified decoder as well as the original decoder. These weights correspond to the KL-f8 auto-encoder model and 48-bit watermarks.
 
 ```
-bash download.sh
+bash download_models.sh
 ```
 Model weights will be saved to `weights/LaWa/last.ckpt` and `weights/first_stage_models/first_stage_KL-f8.ckpt`.  
 
@@ -31,7 +31,11 @@ Download the MIRFlickR dataset from the official website. `data/train_100k.csv` 
 You can train your modified decoder using:
 ```
 python train.py --message_len 48 --config configs/SD14_LaWa.yaml --batch_size 8 --max_epochs 40 --learning_rate 0.00006
+python train.py --message_len 48 --config configs/SD14_LaWa.yaml --batch_size 8  --learning_rate 0.00006
 ```
 Batch size 8 fits on a 32GB GPU.
 
 
+CUDA_VISIBLE_DEVICES=1  python embed_extract.py -w /home/xxy/Desktop/lawa/outputs/train_result_mutdecoder_latent_noise_v16/checkpoints/epoch=000001-step=000049999.ckpt embed --image_folder /home/xxy/Desktop/test_lawa/ --outdir /home/xxy/Desktop/result_lawa/ --message "101010101010101010101010101010101010101010101010"
+
+CUDA_VISIBLE_DEVICES=1 python embed_extract.py -w /home/xxy/Desktop/lawa/outputs/train_result_mutdecoder_latent_noise_v16/checkpoints/epoch=000001-step=000049999.ckpt extract --image_folder /home/xxy/Desktop/result_lawa/ --message "101010101010101010101010101010101010101010101010"
